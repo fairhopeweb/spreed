@@ -25,7 +25,6 @@ namespace OCA\Talk\Status;
 
 use OCA\Talk\Events\ModifyParticipantEvent;
 use OCA\Talk\Room;
-use OCA\Talk\Signaling\Messages;
 use OCA\UserStatus\Service\PredefinedStatusService;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IUserSession;
@@ -49,8 +48,6 @@ class Listener {
 			$statusManager = \OC::$server->get(IManager::class);
 
 			$statusManager->setUserStatus($listener->userSession->getUser()->getUID(), PredefinedStatusService::CALL, IUserStatus::DND, true);
-			$messages = \OC::$server->get(Messages::class);
-			$messages->addMessageForAllParticipants($event->getRoom(), 'refresh-participant-list');
 		});
 
 		$dispatcher->addListener(Room::EVENT_AFTER_SESSION_LEAVE_CALL, static function (ModifyParticipantEvent $event) {
@@ -61,8 +58,6 @@ class Listener {
 			$statusManager = \OC::$server->get(IManager::class);
 
 			$statusManager->revertUserStatus($listener->userSession->getUser()->getUID(), PredefinedStatusService::CALL, IUserStatus::DND);
-			$messages = \OC::$server->get(Messages::class);
-			$messages->addMessageForAllParticipants($event->getRoom(), 'refresh-participant-list');
 		});
 	}
 }
