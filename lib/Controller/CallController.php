@@ -161,7 +161,7 @@ class CallController extends AEnvironmentAwareController {
 			return new DataResponse([], Http::STATUS_NOT_FOUND);
 		}
 
-		if ($all) {
+		if ($all && $this->participant->hasModeratorPermissions()) {
 			$participants = $this->participantService->getParticipantsInCall($this->room);
 
 			// kick out all participants out of the call
