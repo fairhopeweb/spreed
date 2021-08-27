@@ -52,24 +52,24 @@
 			:disabled="loading">
 			<template slot="icon">
 				<VideoOff
-					:size='16'
+					:size="16"
 					decorative />
 				<span class="label">{{ leaveCallLabel }}</span>
 				<MenuDown
-					:size='16'
+					:size="16"
 					decorative />
 			</template>
 			<ActionButton @click="leaveCall(false)">
 				<VideoOff
 					slot="icon"
-					:size='24'
+					:size="24"
 					decorative />
 				{{ leaveCallLabel }}
 			</ActionButton>
 			<ActionButton @click="leaveCall(true)">
 				<VideoOff
 					slot="icon"
-					:size='24'
+					:size="24"
 					decorative />
 				{{ t('spreed', 'End meeting for all') }}
 			</ActionButton>
