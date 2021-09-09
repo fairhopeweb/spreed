@@ -20,25 +20,46 @@
 -->
 
 <template>
-	<Modal v-if="modal" size="prompt" @close="closeModal">
-		<div class="modal__content">
-			Hello world
+	<Modal v-if="modal" size="large" @close="closeModal">
+		<div class="device-checker">
+			<video v-show="videoPreviewAvailable"
+				ref="video"
+				disablePictureInPicture="true"
+				tabindex="-1" />
+		</div>
+		<div class="device-checker__selectors">
+			<MediaDevicesSelector kind="audioinput"
+				:devices="devices"
+				:device-id="audioInputId"
+				:enabled="enabled"
+				@update:deviceId="audioInputId = $event" />
+			<MediaDevicesSelector kind="videoinput"
+				:devices="devices"
+				:device-id="videoInputId"
+				:enabled="enabled"
+				@update:deviceId="videoInputId = $event" />
 		</div>
 	</Modal>
 </template>
 
 <script>
 import Modal from '@nextcloud/vue/dist/Components/Modal'
+import { devices } from '../../mixins/devices'
+import MediaDevicesSelector from '../MediaDevicesSelector.vue'
+
 export default {
 	name: 'DeviceChecker',
 
 	components: {
 		Modal,
+		MediaDevicesSelector,
 	},
+
+	mixins: [devices],
 
 	data() {
 		return {
-			modal: false,
+			modal: true,
 		}
 	},
 	methods: {
@@ -53,5 +74,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.device-checker {
+	height: 400px;
+	width: 400px;
+	background-color: var(--color-main-background);
+}
 </style>

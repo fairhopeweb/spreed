@@ -20,32 +20,35 @@
 -->
 
 <template>
-	<button v-if="showStartCallButton"
-		v-tooltip="{
-			placement: 'auto',
-			trigger: 'hover',
-			content: startCallToolTip,
-			autoHide: false,
-			html: true
-		}"
-		:disabled="startCallButtonDisabled || loading || blockCalls"
-		class="top-bar__button"
-		:class="startCallButtonClasses"
-		@click="joinCall">
-		<span
-			class="icon"
-			:class="startCallIcon" />
-		{{ startCallLabel }}
-	</button>
-	<button v-else-if="showLeaveCallButton"
-		class="top-bar__button error"
-		:disabled="loading"
-		@click="leaveCall">
-		<span
-			class="icon"
-			:class="leaveCallIcon" />
-		{{ leaveCallLabel }}
-	</button>
+	<div class="wrapper">
+		<button v-if="showStartCallButton"
+			v-tooltip="{
+				placement: 'auto',
+				trigger: 'hover',
+				content: startCallToolTip,
+				autoHide: false,
+				html: true
+			}"
+			:disabled="startCallButtonDisabled || loading || blockCalls"
+			class="top-bar__button"
+			:class="startCallButtonClasses"
+			@click="joinCall">
+			<span
+				class="icon"
+				:class="startCallIcon" />
+			{{ startCallLabel }}
+		</button>
+		<button v-else-if="showLeaveCallButton"
+			class="top-bar__button error"
+			:disabled="loading"
+			@click="leaveCall">
+			<span
+				class="icon"
+				:class="leaveCallIcon" />
+			{{ leaveCallLabel }}
+		</button>
+		<DeviceChecker />
+	</div>
 </template>
 
 <script>
@@ -55,9 +58,14 @@ import isInCall from '../../mixins/isInCall'
 import participant from '../../mixins/participant'
 import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip'
 import { emit } from '@nextcloud/event-bus'
+import DeviceChecker from '../DeviceChecker/DeviceChecker.vue'
 
 export default {
 	name: 'CallButton',
+
+	components: {
+		DeviceChecker,
+	},
 
 	directives: {
 		Tooltip,
@@ -216,6 +224,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.wrapper {
+	display: contents;
+}
 .top-bar__button {
 	height: 44px;
 	padding: 0 16px;
