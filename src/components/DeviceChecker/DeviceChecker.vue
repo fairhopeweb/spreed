@@ -22,22 +22,41 @@
 <template>
 	<Modal v-if="modal" size="large" @close="closeModal">
 		<div class="device-checker">
-			<video v-show="videoPreviewAvailable"
-				ref="video"
-				disablePictureInPicture="true"
-				tabindex="-1" />
-		</div>
-		<div class="device-checker__selectors">
-			<MediaDevicesSelector kind="audioinput"
-				:devices="devices"
-				:device-id="audioInputId"
-				:enabled="enabled"
-				@update:deviceId="audioInputId = $event" />
-			<MediaDevicesSelector kind="videoinput"
-				:devices="devices"
-				:device-id="videoInputId"
-				:enabled="enabled"
-				@update:deviceId="videoInputId = $event" />
+			<div class="device-checker__preview">
+				<video v-show="videoPreviewAvailable"
+					class="preview__video"
+					disablePictureInPicture="true"
+					tabindex="-1" />
+				<div v-show="!videoPreviewAvailable"
+					class="preview__novideo">
+					<VideoBackground
+						:display-name="displayName"
+						:user="userId" />
+					<Avatar v-if="userId"
+						:size="128"
+						:disable-menu="true"
+						:disable-tooltip="true"
+						:show-user-status="false"
+						:user="userId"
+						:display-name="displayName" />
+					<div v-if="!userId"
+						class="avatar guest">
+						{{ firstLetterOfGuestName }}
+					</div>
+				</div>
+			</div>
+			<div class="device-checker__selectors">
+				<MediaDevicesSelector kind="audioinput"
+					:devices="devices"
+					:device-id="audioInputId"
+					:enabled="enabled"
+					@update:deviceId="audioInputId = $event" />
+				<MediaDevicesSelector kind="videoinput"
+					:devices="devices"
+					:device-id="videoInputId"
+					:enabled="enabled"
+					@update:deviceId="videoInputId = $event" />
+			</div>
 		</div>
 	</Modal>
 </template>
@@ -46,6 +65,8 @@
 import Modal from '@nextcloud/vue/dist/Components/Modal'
 import { devices } from '../../mixins/devices'
 import MediaDevicesSelector from '../MediaDevicesSelector.vue'
+import VideoBackground from '../CallView/shared/VideoBackground.vue'
+import Avatar from '@nextcloud/vue/dist/Components/Avatar'
 
 export default {
 	name: 'DeviceChecker',
@@ -53,6 +74,8 @@ export default {
 	components: {
 		Modal,
 		MediaDevicesSelector,
+		VideoBackground,
+		Avatar,
 	},
 
 	mixins: [devices],
@@ -62,10 +85,22 @@ export default {
 			modal: true,
 		}
 	},
+
+	computed: {
+		displayName() {
+			return this.$store.getters.getDisplayName()
+		},
+
+		userId() {
+			return this.$store.getters.getUserId()
+		},
+	},
+
 	methods: {
 		showModal() {
 			this.modal = true
 		},
+
 		closeModal() {
 			this.modal = false
 		},
@@ -74,9 +109,32 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../../assets/variables.scss';
+@import '../../assets/avatar.scss';
+@include avatar-mixin(64px);
+@include avatar-mixin(128px);
+
 .device-checker {
-	height: 400px;
 	width: 400px;
 	background-color: var(--color-main-background);
+	&__preview {
+		position: relative;
+		width: 250px;
+		margin: auto;
+	}
+
+	&__selectors {
+		width: 100%;
+	}
+}
+
+.preview {
+	&__video {
+		width: 100%;
+	}
+
+	&__novideo {
+		width: 100%;
+	}
 }
 </style>

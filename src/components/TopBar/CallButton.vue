@@ -228,6 +228,7 @@ export default {
 .wrapper {
 	display: contents;
 }
+
 .top-bar__button {
 	height: 44px;
 	padding: 0 16px;
