@@ -45,17 +45,29 @@
 					</div>
 				</div>
 			</div>
-			<div class="device-checker__selectors">
-				<MediaDevicesSelector kind="audioinput"
-					:devices="devices"
-					:device-id="audioInputId"
-					:enabled="enabled"
-					@update:deviceId="audioInputId = $event" />
-				<MediaDevicesSelector kind="videoinput"
-					:devices="devices"
-					:device-id="videoInputId"
-					:enabled="enabled"
-					@update:deviceId="videoInputId = $event" />
+			<div class="device-checker__device-selection">
+				<button v-if="!showDeviceSelection"
+					class="select-devices"
+					@click="showDeviceSelection = true">
+					<span class="select-devices__icon">
+						<Cog
+							title=""
+							size="20" />
+					</span>
+					<span> {{ t('spreed', 'Choose devices') }}</span>
+				</button>
+				<template v-if="showDeviceSelection">
+					<MediaDevicesSelector kind="audioinput"
+						:devices="devices"
+						:device-id="audioInputId"
+						:enabled="enabled"
+						@update:deviceId="audioInputId = $event" />
+					<MediaDevicesSelector kind="videoinput"
+						:devices="devices"
+						:device-id="videoInputId"
+						:enabled="enabled"
+						@update:deviceId="videoInputId = $event" />
+				</template>
 			</div>
 		</div>
 	</Modal>
@@ -67,6 +79,7 @@ import { devices } from '../../mixins/devices'
 import MediaDevicesSelector from '../MediaDevicesSelector.vue'
 import VideoBackground from '../CallView/shared/VideoBackground.vue'
 import Avatar from '@nextcloud/vue/dist/Components/Avatar'
+import Cog from 'vue-material-design-icons/Cog.vue'
 
 export default {
 	name: 'DeviceChecker',
@@ -76,6 +89,7 @@ export default {
 		MediaDevicesSelector,
 		VideoBackground,
 		Avatar,
+		Cog,
 	},
 
 	mixins: [devices],
@@ -83,6 +97,7 @@ export default {
 	data() {
 		return {
 			modal: true,
+			showDeviceSelection: false,
 		}
 	},
 
@@ -116,14 +131,20 @@ export default {
 
 .device-checker {
 	width: 400px;
+	padding: 20px;
 	background-color: var(--color-main-background);
 	&__preview {
 		position: relative;
 		width: 250px;
-		margin: auto;
+		margin: 0 auto 12px auto;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		overflow: hidden;
+		border-radius: 12px;
 	}
 
-	&__selectors {
+	&__device-selection {
 		width: 100%;
 	}
 }
@@ -134,7 +155,28 @@ export default {
 	}
 
 	&__novideo {
-		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 200px;
+		width: 360px;
+		overflow: hidden;
+	}
+}
+
+.select-devices {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: none;
+	border: none;
+	&__icon {
+		margin-right: 4px;
+	}
+	opacity: 0.8;
+	&:hover,
+	&:focus {
+		opacity: 1;
 	}
 }
 </style>
