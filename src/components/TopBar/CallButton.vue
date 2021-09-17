@@ -47,7 +47,6 @@
 				:class="leaveCallIcon" />
 			{{ leaveCallLabel }}
 		</button>
-		<DeviceChecker />
 	</div>
 </template>
 
@@ -58,14 +57,9 @@ import isInCall from '../../mixins/isInCall'
 import participant from '../../mixins/participant'
 import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip'
 import { emit } from '@nextcloud/event-bus'
-import DeviceChecker from '../DeviceChecker/DeviceChecker.vue'
 
 export default {
 	name: 'CallButton',
-
-	components: {
-		DeviceChecker,
-	},
 
 	directives: {
 		Tooltip,
