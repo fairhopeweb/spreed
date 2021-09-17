@@ -22,12 +22,13 @@
 <template>
 	<Modal v-if="modal" size="large" @close="closeModal">
 		<div class="device-checker">
+			<!-- Preview -->
 			<div class="device-checker__preview">
-				<video v-show="videoPreviewAvailable"
+				<Video v-if="videoPreviewAvailable"
 					class="preview__video"
-					disablePictureInPicture="true"
+					disable-picture-in-picture="true"
 					tabindex="-1" />
-				<div v-show="!videoPreviewAvailable"
+				<div v-if="!videoPreviewAvailable"
 					class="preview__novideo">
 					<VideoBackground
 						:display-name="displayName"
@@ -45,6 +46,46 @@
 					</div>
 				</div>
 			</div>
+
+			<!--
+				Toggle audio and video on and off before starting or joining
+				a call.
+			-->
+			<div class="device-checker__call-preferences">
+				<!-- Audio toggle -->
+				<button
+					class="device-toggle"
+					@click="toggleAudio">
+					<span class="device-toggle__icon">
+						<Microphone
+							v-if="audioOn"
+							title=""
+							:size="20" />
+						<MicrophoneOff
+							v-if="!audioOn"
+							title=""
+							:size="20" />
+					</span>
+				</button>
+
+				<!-- Video toggle -->
+				<button
+					class="device-toggle"
+					@click="toggleVideo">
+					<span class="device-toggle__icon">
+						<Video
+							v-if="videoOn"
+							title=""
+							:size="20" />
+						<VideoOff
+							v-if="!videoOn"
+							title=""
+							:size="20" />
+					</span>
+				</button>
+			</div>
+
+			<!-- Device selection -->
 			<div class="device-checker__device-selection">
 				<button v-if="!showDeviceSelection"
 					class="select-devices"
@@ -52,7 +93,7 @@
 					<span class="select-devices__icon">
 						<Cog
 							title=""
-							size="20" />
+							:size="20" />
 					</span>
 					<span> {{ t('spreed', 'Choose devices') }}</span>
 				</button>
@@ -69,6 +110,9 @@
 						@update:deviceId="videoInputId = $event" />
 				</template>
 			</div>
+
+			<!-- Join call -->
+			<CallButton />
 		</div>
 	</Modal>
 </template>
@@ -80,6 +124,13 @@ import MediaDevicesSelector from '../MediaDevicesSelector.vue'
 import VideoBackground from '../CallView/shared/VideoBackground.vue'
 import Avatar from '@nextcloud/vue/dist/Components/Avatar'
 import Cog from 'vue-material-design-icons/Cog.vue'
+import Microphone from 'vue-material-design-icons/Microphone'
+import MicrophoneOff from 'vue-material-design-icons/MicrophoneOff'
+import Video from 'vue-material-design-icons/Video'
+import VideoOff from 'vue-material-design-icons/VideoOff'
+import { localMediaModel } from '../../utils/webrtc/index'
+import { audioVideoToggles } from '../../mixins/audioVideoToggles'
+import CallButton from '../TopBar/CallButton.vue'
 
 export default {
 	name: 'DeviceChecker',
@@ -90,14 +141,22 @@ export default {
 		VideoBackground,
 		Avatar,
 		Cog,
+		Microphone,
+		MicrophoneOff,
+		Video,
+		VideoOff,
+		CallButton,
 	},
 
-	mixins: [devices],
+	mixins: [devices, audioVideoToggles],
 
 	data() {
 		return {
+			model: localMediaModel,
 			modal: true,
 			showDeviceSelection: false,
+			audioOn: undefined,
+			videoOn: undefined,
 		}
 	},
 
@@ -109,6 +168,15 @@ export default {
 		userId() {
 			return this.$store.getters.getUserId()
 		},
+
+		token() {
+			return this.$store.getters.getToken()
+		},
+	},
+
+	mounted() {
+		this.audioOn = !localStorage.getItem('audioDisabled_' + this.token)
+		this.videoOn = !localStorage.getItem('videoDisabled_' + this.token)
 	},
 
 	methods: {
@@ -118,6 +186,26 @@ export default {
 
 		closeModal() {
 			this.modal = false
+		},
+
+		toggleAudio() {
+			if (!this.audioOn) {
+				localStorage.setItem('audioDisabled_' + this.token, 'false')
+				this.audioOn = true
+			} else {
+				localStorage.setItem('audioDisabled_' + this.token, 'true')
+				this.audioOn = false
+			}
+		},
+
+		toggleVideo() {
+			if (!this.videoOn) {
+				localStorage.setItem('videoDisabled_' + this.token, 'false')
+				this.videoOn = true
+			} else {
+				localStorage.setItem('videoDisabled_' + this.token, 'true')
+				this.videoOn = false
+			}
 		},
 	},
 }
@@ -178,5 +266,10 @@ export default {
 	&:focus {
 		opacity: 1;
 	}
+}
+
+.device-toggle {
+	background: none;
+	border: none;
 }
 </style>
