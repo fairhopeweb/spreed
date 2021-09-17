@@ -23,10 +23,10 @@
 		<div class="media-devices-selector__icon">
 			<Microphone v-if="deviceIcon === 'microphone'"
 				title=""
-				size="20" />
+				:size="20" />
 			<Video v-if="deviceIcon === 'camera'"
 				title=""
-				size="20" />
+				:size="20" />
 		</div>
 
 		<Multiselect :id="deviceSelectorId"
