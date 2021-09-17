@@ -112,7 +112,8 @@
 			</div>
 
 			<!-- Join call -->
-			<CallButton />
+			<CallButton
+				:force-join-call="true" />
 		</div>
 	</Modal>
 </template>
@@ -131,6 +132,7 @@ import VideoOff from 'vue-material-design-icons/VideoOff'
 import { localMediaModel } from '../../utils/webrtc/index'
 import { audioVideoToggles } from '../../mixins/audioVideoToggles'
 import CallButton from '../TopBar/CallButton.vue'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 
 export default {
 	name: 'DeviceChecker',
@@ -153,7 +155,7 @@ export default {
 	data() {
 		return {
 			model: localMediaModel,
-			modal: true,
+			modal: false,
 			showDeviceSelection: false,
 			audioOn: undefined,
 			videoOn: undefined,
@@ -175,8 +177,15 @@ export default {
 	},
 
 	mounted() {
+		subscribe('talk:device-checker:show', this.showModal)
+		subscribe('talk:device-checker:hide', this.closeModal)
 		this.audioOn = !localStorage.getItem('audioDisabled_' + this.token)
 		this.videoOn = !localStorage.getItem('videoDisabled_' + this.token)
+	},
+
+	beforeDestroy() {
+		unsubscribe('talk:device-checker:show', this.showModal)
+		unsubscribe('talk:device-checker:hide', this.closeModal)
 	},
 
 	methods: {
