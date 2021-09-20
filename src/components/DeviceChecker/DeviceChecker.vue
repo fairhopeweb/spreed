@@ -110,6 +110,9 @@
 						@update:deviceId="videoInputId = $event" />
 				</template>
 			</div>
+			<CheckboxRadioSwitch :checked.sync="rememberPreferences">
+				{{ t('spreed',"Remember preferences and don't show again") }}
+			</CheckboxRadioSwitch>
 
 			<!-- Join call -->
 			<CallButton
@@ -133,6 +136,8 @@ import { localMediaModel } from '../../utils/webrtc/index'
 import { audioVideoToggles } from '../../mixins/audioVideoToggles'
 import CallButton from '../TopBar/CallButton.vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import CheckboxRadioSwitch from '@nextcloud/vue/dist/Components/CheckboxRadioSwitch'
+import BrowserStorage from '../../services/BrowserStorage'
 
 export default {
 	name: 'DeviceChecker',
@@ -148,6 +153,7 @@ export default {
 		Video,
 		VideoOff,
 		CallButton,
+		CheckboxRadioSwitch,
 	},
 
 	mixins: [devices, audioVideoToggles],
@@ -159,6 +165,8 @@ export default {
 			showDeviceSelection: false,
 			audioOn: undefined,
 			videoOn: undefined,
+			rememberPreferences: false,
+
 		}
 	},
 
@@ -173,6 +181,16 @@ export default {
 
 		token() {
 			return this.$store.getters.getToken()
+		},
+	},
+
+	watch: {
+		rememberPreferences(newValue) {
+			if (newValue) {
+				BrowserStorage.setItem('showDeviceChecker' + this.token, 'false')
+			} else {
+				BrowserStorage.setItem('showDeviceChecker' + this.token, 'true')
+			}
 		},
 	},
 
