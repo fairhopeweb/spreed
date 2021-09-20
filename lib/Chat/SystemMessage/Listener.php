@@ -27,6 +27,7 @@ use OCA\Talk\Chat\ChatManager;
 use OCA\Talk\Events\AddParticipantsEvent;
 use OCA\Talk\Events\AttendeesAddedEvent;
 use OCA\Talk\Events\AttendeesRemovedEvent;
+use OCA\Talk\Events\ModifyEveryoneEvent;
 use OCA\Talk\Events\ModifyLobbyEvent;
 use OCA\Talk\Events\ModifyParticipantEvent;
 use OCA\Talk\Events\ModifyRoomEvent;
@@ -96,6 +97,11 @@ class Listener implements IEventListener {
 			}
 		});
 		$dispatcher->addListener(Room::EVENT_AFTER_SESSION_LEAVE_CALL, static function (ModifyParticipantEvent $event) {
+			if ($event instanceof ModifyEveryoneEvent) {
+				// No individual system message if the call is ended for everyone
+				return;
+			}
+
 			$room = $event->getRoom();
 
 			$session = $event->getParticipant()->getSession();
@@ -103,8 +109,6 @@ class Listener implements IEventListener {
 				// This happens in case the user was kicked/lobbied
 				return;
 			}
-
-			// FIXME ignore when call was ended for everyone
 
 			/** @var self $listener */
 			$listener = \OC::$server->query(self::class);
