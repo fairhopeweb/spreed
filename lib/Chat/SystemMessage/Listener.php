@@ -104,6 +104,8 @@ class Listener implements IEventListener {
 				return;
 			}
 
+			// FIXME ignore when call was ended for everyone
+
 			/** @var self $listener */
 			$listener = \OC::$server->query(self::class);
 
