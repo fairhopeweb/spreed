@@ -183,11 +183,12 @@ class AttendeeMapper extends QBMapper {
 			$query->executeStatement();
 		} else {
 			foreach ([
-				Participant::PERMISSION_LOBBY,
-				Participant::PERMISSION_PUBLISH_AUDIO,
-				Participant::PERMISSION_PUBLISH_VIDEO,
-				Participant::PERMISSION_PUBLISH_SCREEN,
-				Participant::PERMISSION_CALL_START,
+				Attendee::PERMISSIONS_CALL_JOIN,
+				Attendee::PERMISSIONS_CALL_START,
+				Attendee::PERMISSIONS_PUBLISH_AUDIO,
+				Attendee::PERMISSIONS_PUBLISH_VIDEO,
+				Attendee::PERMISSIONS_PUBLISH_SCREEN,
+				Attendee::PERMISSIONS_LOBBY_IGNORE,
 			] as $permission) {
 				if ($permission & $newState) {
 					if ($mode === Participant::PERMISSIONS_MODIFY_ADD) {

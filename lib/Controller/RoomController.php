@@ -397,7 +397,7 @@ class RoomController extends AEnvironmentAwareController {
 			'actorType' => '',
 			'actorId' => '',
 			'attendeeId' => 0,
-			'publishingPermissions' => Attendee::PUBLISHING_PERMISSIONS_NONE,
+			'publishingPermissions' => Attendee::PERMISSIONS_NONE,
 			'canEnableSIP' => false,
 			'attendeePin' => '',
 			'description' => '',

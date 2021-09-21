@@ -47,12 +47,6 @@ class Participant {
 	public const PERMISSIONS_MODIFY_REMOVE = 'remove';
 	public const PERMISSIONS_MODIFY_SET = 'set';
 
-	public const PERMISSION_LOBBY = 1;
-	public const PERMISSION_PUBLISH_AUDIO = 2;
-	public const PERMISSION_PUBLISH_VIDEO = 4;
-	public const PERMISSION_PUBLISH_SCREEN = 8;
-	public const PERMISSION_CALL_START = 16;
-
 	public const NOTIFY_DEFAULT = 0;
 	public const NOTIFY_ALWAYS = 1;
 	public const NOTIFY_MENTION = 2;

@@ -828,10 +828,10 @@ class ParticipantService {
 		}
 
 		$publishingPermissions = $participant->getAttendee()->getPublishingPermissions();
-		if (!($publishingPermissions & Attendee::PUBLISHING_PERMISSIONS_AUDIO)) {
+		if (!($publishingPermissions & Attendee::PERMISSIONS_PUBLISH_AUDIO)) {
 			$flags &= ~Participant::FLAG_WITH_AUDIO;
 		}
-		if (!($publishingPermissions & Attendee::PUBLISHING_PERMISSIONS_VIDEO)) {
+		if (!($publishingPermissions & Attendee::PERMISSIONS_PUBLISH_VIDEO)) {
 			$flags &= ~Participant::FLAG_WITH_VIDEO;
 		}
 
@@ -873,10 +873,10 @@ class ParticipantService {
 		}
 
 		$publishingPermissions = $participant->getAttendee()->getPublishingPermissions();
-		if (!($publishingPermissions & Attendee::PUBLISHING_PERMISSIONS_AUDIO)) {
+		if (!($publishingPermissions & Attendee::PERMISSIONS_PUBLISH_AUDIO)) {
 			$flags &= ~Participant::FLAG_WITH_AUDIO;
 		}
-		if (!($publishingPermissions & Attendee::PUBLISHING_PERMISSIONS_VIDEO)) {
+		if (!($publishingPermissions & Attendee::PERMISSIONS_PUBLISH_VIDEO)) {
 			$flags &= ~Participant::FLAG_WITH_VIDEO;
 		}
 
