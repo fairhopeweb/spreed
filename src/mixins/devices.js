@@ -385,7 +385,7 @@ export const devices = {
 		},
 
 		videoPreviewAvailable() {
-			return this.videoInputId && this.videoStream
+			return !!this.videoInputId && !!this.videoStream
 		},
 	},
 }

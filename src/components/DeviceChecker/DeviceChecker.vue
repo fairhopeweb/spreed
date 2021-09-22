@@ -24,7 +24,9 @@
 		<div class="device-checker">
 			<!-- Preview -->
 			<div class="device-checker__preview">
-				<Video v-if="videoPreviewAvailable"
+				<!-- eslint-disable-next-line -->
+				<video v-show="videoPreviewAvailable"
+					ref="video"
 					class="preview__video"
 					disable-picture-in-picture="true"
 					tabindex="-1" />
