@@ -23,10 +23,10 @@
 		<div class="media-devices-selector__icon">
 			<Microphone v-if="deviceIcon === 'microphone'"
 				title=""
-				:size="20" />
+				:size="16" />
 			<Video v-if="deviceIcon === 'camera'"
 				title=""
-				:size="20" />
+				:size="16" />
 		</div>
 
 		<Multiselect :id="deviceSelectorId"
@@ -201,7 +201,7 @@ export default {
 	margin: 16px 8px 16px 4px;
 	&__icon {
 		display: flex;
-		justify-content: center;
+		justify-content: flex-start;
 		align-items: center;
 		width: 36px;
 	}

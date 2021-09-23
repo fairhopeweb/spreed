@@ -114,8 +114,9 @@
 						@update:deviceId="videoInputId = $event" />
 				</template>
 			</div>
-			<CheckboxRadioSwitch :checked.sync="rememberPreferences">
-				{{ t('spreed',"Remember preferences and don't show again") }}
+			<CheckboxRadioSwitch :checked.sync="rememberPreferences"
+				class="checkbox">
+				{{ t('spreed',"Remember and don't show again") }}
 			</CheckboxRadioSwitch>
 
 			<!-- Join call -->
@@ -220,6 +221,7 @@ export default {
 
 		closeModal() {
 			this.modal = false
+			this.showDeviceSelection = false
 		},
 
 		toggleAudio() {
@@ -299,6 +301,8 @@ export default {
 	justify-content: center;
 	background: none;
 	border: none;
+	padding: 0;
+	margin: auto;
 	&__icon {
 		margin-right: 4px;
 	}
@@ -316,6 +320,13 @@ export default {
 
 .call-button {
 	display: flex;
-	justify-content: flex-end;
+	justify-content: center;
+	min-width: 150px;
+}
+
+.checkbox {
+	display: flex;
+	justify-content: center;
+	margin: 14px;
 }
 </style>
