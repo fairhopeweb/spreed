@@ -57,6 +57,7 @@
 				<!-- Audio toggle -->
 				<button
 					class="device-toggle"
+					:disabled="!audioPreviewAvailable"
 					@click="toggleAudio">
 					<span class="device-toggle__icon">
 						<Microphone
@@ -73,6 +74,7 @@
 				<!-- Video toggle -->
 				<button
 					class="device-toggle"
+					:disabled="!videoPreviewAvailable"
 					@click="toggleVideo">
 					<span class="device-toggle__icon">
 						<Video
@@ -118,6 +120,7 @@
 
 			<!-- Join call -->
 			<CallButton
+				class="call-button"
 				:force-join-call="true" />
 		</div>
 	</Modal>
@@ -249,37 +252,44 @@ export default {
 @include avatar-mixin(128px);
 
 .device-checker {
-	width: 400px;
+	max-width: 400px;
 	padding: 20px;
 	background-color: var(--color-main-background);
 	&__preview {
 		position: relative;
-		width: 250px;
 		margin: 0 auto 12px auto;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		overflow: hidden;
 		border-radius: 12px;
+		height: 250px;
+		background-color: var(--color-loading-dark);
 	}
 
 	&__device-selection {
 		width: 100%;
 	}
+
+	&__call-preferences {
+		display: flex;
+		justify-content: center;
+	}
 }
 
 .preview {
 	&__video {
-		width: 100%;
+		max-width: 100%;
+		object-fit: contain;
+		max-height: 100%;
 	}
 
 	&__novideo {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		height: 200px;
-		width: 360px;
 		overflow: hidden;
+		width: 100%;
 	}
 }
 
@@ -302,5 +312,10 @@ export default {
 .device-toggle {
 	background: none;
 	border: none;
+}
+
+.call-button {
+	display: flex;
+	justify-content: flex-end;
 }
 </style>

@@ -329,7 +329,7 @@ export const devices = {
 		},
 
 		audioPreviewAvailable() {
-			return this.audioInputId && this.audioStream
+			return !!this.audioInputId && !!this.audioStream
 		},
 
 		audioStreamErrorMessage() {
