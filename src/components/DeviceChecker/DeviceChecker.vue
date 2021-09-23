@@ -25,12 +25,12 @@
 			<!-- Preview -->
 			<div class="device-checker__preview">
 				<!-- eslint-disable-next-line -->
-				<video v-show="videoPreviewAvailable"
+				<video v-show="showVideo"
 					ref="video"
 					class="preview__video"
 					disable-picture-in-picture="true"
 					tabindex="-1" />
-				<div v-if="!videoPreviewAvailable"
+				<div v-show="!showVideo"
 					class="preview__novideo">
 					<VideoBackground
 						:display-name="displayName"
@@ -181,6 +181,10 @@ export default {
 
 		token() {
 			return this.$store.getters.getToken()
+		},
+
+		showVideo() {
+			return this.videoPreviewAvailable && this.videoOn
 		},
 	},
 
