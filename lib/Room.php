@@ -1055,7 +1055,7 @@ class Room {
 	public function setPermissions(string $mode, int $newPermissions): bool {
 		if ($mode === 'default') {
 			$oldPermissions = $this->defaultPermissions;
-		} else if ($mode === 'call') {
+		} elseif ($mode === 'call') {
 			$oldPermissions = $this->callPermissions;
 		} else {
 			return false;
@@ -1084,8 +1084,8 @@ class Room {
 
 		if ($mode === 'default') {
 			$this->defaultPermissions = $newPermissions;
-		} else if ($mode === 'call') {
-			$this->callPermissionss = $newPermissions;
+		} else {
+			$this->callPermissions = $newPermissions;
 		}
 
 		$this->dispatcher->dispatch(self::EVENT_AFTER_PERMISSIONS_SET, $event);
