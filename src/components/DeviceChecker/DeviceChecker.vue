@@ -135,11 +135,9 @@ import MicrophoneOff from 'vue-material-design-icons/MicrophoneOff'
 import Video from 'vue-material-design-icons/Video'
 import VideoOff from 'vue-material-design-icons/VideoOff'
 import { localMediaModel } from '../../utils/webrtc/index'
-import { audioVideoToggles } from '../../mixins/audioVideoToggles'
 import CallButton from '../TopBar/CallButton.vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import CheckboxRadioSwitch from '@nextcloud/vue/dist/Components/CheckboxRadioSwitch'
-import BrowserStorage from '../../services/BrowserStorage'
 
 export default {
 	name: 'DeviceChecker',
@@ -158,7 +156,7 @@ export default {
 		CheckboxRadioSwitch,
 	},
 
-	mixins: [devices, audioVideoToggles],
+	mixins: [devices],
 
 	data() {
 		return {
@@ -189,9 +187,9 @@ export default {
 	watch: {
 		rememberPreferences(newValue) {
 			if (newValue) {
-				BrowserStorage.setItem('showDeviceChecker' + this.token, 'false')
+				localStorage.setItem('showDeviceChecker' + this.token, 'false')
 			} else {
-				BrowserStorage.setItem('showDeviceChecker' + this.token, 'true')
+				localStorage.setItem('showDeviceChecker' + this.token, 'true')
 			}
 		},
 	},
@@ -219,7 +217,7 @@ export default {
 
 		toggleAudio() {
 			if (!this.audioOn) {
-				localStorage.setItem('audioDisabled_' + this.token, 'false')
+				localStorage.removeItem('audioDisabled_' + this.token)
 				this.audioOn = true
 			} else {
 				localStorage.setItem('audioDisabled_' + this.token, 'true')
@@ -229,7 +227,7 @@ export default {
 
 		toggleVideo() {
 			if (!this.videoOn) {
-				localStorage.setItem('videoDisabled_' + this.token, 'false')
+				localStorage.removeItem('videoDisabled_' + this.token)
 				this.videoOn = true
 			} else {
 				localStorage.setItem('videoDisabled_' + this.token, 'true')
