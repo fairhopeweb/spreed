@@ -50,6 +50,18 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	/** @var array[] */
 	protected static $messages;
 
+
+	protected static $permissionsMap = [
+		'D' => 0, // PERMISSIONS_DEFAULT
+		'C' => 1, // PERMISSIONS_CUSTOM
+		'S' => 2, // PERMISSIONS_CALL_START
+		'J' => 4, // PERMISSIONS_CALL_JOIN
+		'L' => 8, // PERMISSIONS_LOBBY_IGNORE
+		'A' => 16, // PERMISSIONS_PUBLISH_AUDIO
+		'V' => 32, // PERMISSIONS_PUBLISH_VIDEO
+		'P' => 64, // PERMISSIONS_PUBLISH_SCREEN
+	];
+
 	/** @var string */
 	protected $currentUser;
 
@@ -489,23 +501,12 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 			return $permissions;
 		}
 
-		$map = [
-			'D' => 0, // PERMISSIONS_DEFAULT
-			'C' => 1, // PERMISSIONS_CUSTOM
-			'S' => 2, // PERMISSIONS_CALL_START
-			'J' => 4, // PERMISSIONS_CALL_JOIN
-			'L' => 8, // PERMISSIONS_LOBBY_IGNORE
-			'A' => 16, // PERMISSIONS_PUBLISH_AUDIO
-			'V' => 32, // PERMISSIONS_PUBLISH_VIDEO
-			'P' => 64, // PERMISSIONS_PUBLISH_SCREEN
-		];
-
 		$numericPermissions = 0;
-		foreach ($map as $char => $int) {
+		foreach (self::$permissionsMap as $char => $int) {
 			if (strpos($permissions, $char) !== false) {
-				$numericPermissions +=$int;
+				$numericPermissions += $int;
+				$permissions = str_replace($char, '', $permissions);
 			}
-			$permissions = str_replace($char, '', $permissions);
 		}
 
 		if (trim($permissions) !== '') {
@@ -518,22 +519,11 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	private function mapPermissionsAPIOutput($permissions): string {
 		$permissions = (int) $permissions;
 
-		$map = [
-			'D' => 0, // PERMISSIONS_DEFAULT
-			'C' => 1, // PERMISSIONS_CUSTOM
-			'S' => 2, // PERMISSIONS_CALL_START
-			'J' => 4, // PERMISSIONS_CALL_JOIN
-			'L' => 8, // PERMISSIONS_LOBBY_IGNORE
-			'A' => 16, // PERMISSIONS_PUBLISH_AUDIO
-			'V' => 32, // PERMISSIONS_PUBLISH_VIDEO
-			'P' => 64, // PERMISSIONS_PUBLISH_SCREEN
-		];
-
 		$permissionsString = '';
-		foreach ($map as $char => $int) {
+		foreach (self::$permissionsMap as $char => $int) {
 			if ($permissions & $int) {
-				$permissionsString .=$char;
-				$permissions -= $int;
+				$permissionsString .= $char;
+				$permissions &= ~ $int;
 			}
 		}
 
