@@ -122,7 +122,7 @@ class CallController extends AEnvironmentAwareController {
 			$flags = Participant::FLAG_IN_CALL | Participant::FLAG_WITH_AUDIO | Participant::FLAG_WITH_VIDEO;
 		}
 
-		if ($this->participant->hasModeratorPermissions()) {
+		if ($forcePermissions !== null && $this->participant->hasModeratorPermissions()) {
 			$this->room->setPermissions('call', $forcePermissions);
 		}
 
